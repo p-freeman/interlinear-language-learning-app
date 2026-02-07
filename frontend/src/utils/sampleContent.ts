@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
 import {
   Project,
   CONTENT_DIR,
@@ -6,6 +7,7 @@ import {
   addProject,
   generateProjectId,
   getProjects,
+  saveWebContent,
 } from './storage';
 
 // Sample interlinear HTML content
@@ -214,65 +216,107 @@ five`;
 
 export const installSampleContent = async (): Promise<boolean> => {
   try {
+    console.log('Starting sample content installation...');
+    console.log('Platform:', Platform.OS);
+    
     await ensureContentDirectory();
     
     // Check if sample content already exists
     const existingProjects = await getProjects();
+    console.log('Existing projects:', existingProjects.length);
+    
     const sampleExists = existingProjects.some(
       p => p.projectName === 'Sample Lesson - Greetings' && p.source === 'Sample Content'
     );
     
     if (sampleExists) {
+      console.log('Sample content already exists');
       return true; // Already installed
     }
     
     const projectId = generateProjectId();
-    const folderPath = `${CONTENT_DIR}Swiss German/English/Sample Content/Sample_Lesson_Greetings_${projectId}/`;
+    console.log('Generated project ID:', projectId);
     
-    // Create directory
-    await FileSystem.makeDirectoryAsync(folderPath, { intermediates: true });
-    
-    // Write files
-    await FileSystem.writeAsStringAsync(
-      `${folderPath}interlinear.html`,
-      SAMPLE_INTERLINEAR_HTML,
-      { encoding: FileSystem.EncodingType.UTF8 }
-    );
-    
-    await FileSystem.writeAsStringAsync(
-      `${folderPath}project.yaml`,
-      SAMPLE_PROJECT_YAML,
-      { encoding: FileSystem.EncodingType.UTF8 }
-    );
-    
-    await FileSystem.writeAsStringAsync(
-      `${folderPath}words_target.txt`,
-      SAMPLE_WORDS_TARGET,
-      { encoding: FileSystem.EncodingType.UTF8 }
-    );
-    
-    await FileSystem.writeAsStringAsync(
-      `${folderPath}words_native.txt`,
-      SAMPLE_WORDS_NATIVE,
-      { encoding: FileSystem.EncodingType.UTF8 }
-    );
-    
-    // Create and save project
-    const project: Project = {
-      id: projectId,
-      projectName: 'Sample Lesson - Greetings',
-      targetLanguage: 'Swiss German',
-      nativeLanguage: 'English',
-      author: 'Interlinear Team',
-      source: 'Sample Content',
-      description: 'A sample lesson to demonstrate the Birkenbihl method with basic Swiss German greetings.',
-      folderPath,
-      createdAt: new Date().toISOString(),
-    };
-    
-    await addProject(project);
-    
-    return true;
+    if (Platform.OS === 'web') {
+      // For web platform, store content in AsyncStorage
+      console.log('Installing for web platform...');
+      
+      const project: Project = {
+        id: projectId,
+        projectName: 'Sample Lesson - Greetings',
+        targetLanguage: 'Swiss German',
+        nativeLanguage: 'English',
+        author: 'Interlinear Team',
+        source: 'Sample Content',
+        description: 'A sample lesson to demonstrate the Birkenbihl method with basic Swiss German greetings.',
+        folderPath: `web_content/${projectId}`,
+        createdAt: new Date().toISOString(),
+        htmlContent: SAMPLE_INTERLINEAR_HTML,
+      };
+      
+      // Save HTML content separately for web
+      await saveWebContent(projectId, SAMPLE_INTERLINEAR_HTML);
+      await addProject(project);
+      
+      console.log('Web sample content installed successfully');
+      return true;
+    } else {
+      // For native platforms, use file system
+      console.log('Installing for native platform...');
+      
+      const folderPath = `${CONTENT_DIR}Swiss German/English/Sample Content/Sample_Lesson_Greetings_${projectId}/`;
+      console.log('Folder path:', folderPath);
+      
+      // Create directory
+      await FileSystem.makeDirectoryAsync(folderPath, { intermediates: true });
+      console.log('Directory created');
+      
+      // Write files
+      await FileSystem.writeAsStringAsync(
+        `${folderPath}interlinear.html`,
+        SAMPLE_INTERLINEAR_HTML,
+        { encoding: FileSystem.EncodingType.UTF8 }
+      );
+      console.log('HTML file written');
+      
+      await FileSystem.writeAsStringAsync(
+        `${folderPath}project.yaml`,
+        SAMPLE_PROJECT_YAML,
+        { encoding: FileSystem.EncodingType.UTF8 }
+      );
+      
+      await FileSystem.writeAsStringAsync(
+        `${folderPath}words_target.txt`,
+        SAMPLE_WORDS_TARGET,
+        { encoding: FileSystem.EncodingType.UTF8 }
+      );
+      
+      await FileSystem.writeAsStringAsync(
+        `${folderPath}words_native.txt`,
+        SAMPLE_WORDS_NATIVE,
+        { encoding: FileSystem.EncodingType.UTF8 }
+      );
+      
+      console.log('All files written');
+      
+      // Create and save project
+      const project: Project = {
+        id: projectId,
+        projectName: 'Sample Lesson - Greetings',
+        targetLanguage: 'Swiss German',
+        nativeLanguage: 'English',
+        author: 'Interlinear Team',
+        source: 'Sample Content',
+        description: 'A sample lesson to demonstrate the Birkenbihl method with basic Swiss German greetings.',
+        folderPath,
+        createdAt: new Date().toISOString(),
+      };
+      
+      await addProject(project);
+      console.log('Project added to storage');
+      
+      return true;
+    }
   } catch (error) {
     console.error('Error installing sample content:', error);
     return false;
