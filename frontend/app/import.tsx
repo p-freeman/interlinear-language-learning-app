@@ -177,6 +177,30 @@ export default function ImportScreen() {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>OR</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="sparkles" size={24} color="#00b894" />
+            <Text style={styles.sectionTitle}>Try Sample Content</Text>
+          </View>
+          <Text style={styles.sectionDescription}>
+            Load a sample Swiss German lesson to see how the app works.
+          </Text>
+          <TouchableOpacity
+            style={[styles.button, styles.sampleButton, loading && styles.buttonDisabled]}
+            onPress={handleLoadSample}
+            disabled={loading}
+          >
+            <Ionicons name="rocket" size={20} color="#fff" />
+            <Text style={styles.buttonText}>Load Sample Content</Text>
+          </TouchableOpacity>
+        </View>
+
         {loading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#6c5ce7" />
