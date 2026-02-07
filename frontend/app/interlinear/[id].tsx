@@ -115,6 +115,12 @@ export default function InterlinearScreen() {
   };
 
   const loadAudio = async (proj: Project) => {
+    // Skip audio on web platform for now
+    if (Platform.OS === 'web') {
+      console.log('Audio playback not supported on web preview');
+      return;
+    }
+    
     try {
       await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true,
