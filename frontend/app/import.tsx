@@ -16,7 +16,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { importZipFromUri, importZipFromUrl } from '../utils/zipHandler';
+import { importZipFromUri, importZipFromUrl } from '../src/utils/zipHandler';
 
 export default function ImportScreen() {
   const insets = useSafeAreaInsets();
