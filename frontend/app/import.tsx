@@ -275,6 +275,9 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 8,
   },
+  sampleButton: {
+    backgroundColor: '#00b894',
+  },
   buttonDisabled: {
     opacity: 0.5,
   },
