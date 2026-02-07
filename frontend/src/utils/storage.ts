@@ -1,5 +1,6 @@
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 export interface Project {
   id: string;
@@ -11,15 +12,30 @@ export interface Project {
   description?: string;
   folderPath: string;
   createdAt: string;
+  // For web platform - store content directly
+  htmlContent?: string;
+  audioBase64?: string;
 }
 
 const PROJECTS_KEY = 'interlinear_projects';
-export const CONTENT_DIR = `${FileSystem.documentDirectory}content/`;
+const WEB_CONTENT_KEY = 'interlinear_web_content';
+
+export const CONTENT_DIR = Platform.OS === 'web' 
+  ? 'web_content/' 
+  : `${FileSystem.documentDirectory}content/`;
 
 export const ensureContentDirectory = async (): Promise<void> => {
-  const dirInfo = await FileSystem.getInfoAsync(CONTENT_DIR);
-  if (!dirInfo.exists) {
-    await FileSystem.makeDirectoryAsync(CONTENT_DIR, { intermediates: true });
+  if (Platform.OS === 'web') {
+    // No need to create directory on web
+    return;
+  }
+  try {
+    const dirInfo = await FileSystem.getInfoAsync(CONTENT_DIR);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(CONTENT_DIR, { intermediates: true });
+    }
+  } catch (error) {
+    console.error('Error ensuring content directory:', error);
   }
 };
 
@@ -70,14 +86,16 @@ export const deleteProject = async (id: string): Promise<void> => {
   const project = projects.find(p => p.id === id);
   
   if (project) {
-    // Delete the project folder
-    try {
-      const folderInfo = await FileSystem.getInfoAsync(project.folderPath);
-      if (folderInfo.exists) {
-        await FileSystem.deleteAsync(project.folderPath, { idempotent: true });
+    // Delete the project folder (only on native platforms)
+    if (Platform.OS !== 'web') {
+      try {
+        const folderInfo = await FileSystem.getInfoAsync(project.folderPath);
+        if (folderInfo.exists) {
+          await FileSystem.deleteAsync(project.folderPath, { idempotent: true });
+        }
+      } catch (error) {
+        console.error('Error deleting project folder:', error);
       }
-    } catch (error) {
-      console.error('Error deleting project folder:', error);
     }
     
     // Remove from the list
@@ -88,4 +106,25 @@ export const deleteProject = async (id: string): Promise<void> => {
 
 export const generateProjectId = (): string => {
   return `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+// Store HTML content for web platform
+export const saveWebContent = async (projectId: string, htmlContent: string): Promise<void> => {
+  try {
+    const key = `${WEB_CONTENT_KEY}_${projectId}`;
+    await AsyncStorage.setItem(key, htmlContent);
+  } catch (error) {
+    console.error('Error saving web content:', error);
+  }
+};
+
+// Get HTML content for web platform
+export const getWebContent = async (projectId: string): Promise<string | null> => {
+  try {
+    const key = `${WEB_CONTENT_KEY}_${projectId}`;
+    return await AsyncStorage.getItem(key);
+  } catch (error) {
+    console.error('Error getting web content:', error);
+    return null;
+  }
 };
