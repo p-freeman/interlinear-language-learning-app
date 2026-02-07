@@ -59,10 +59,26 @@ export default function InterlinearScreen() {
 
   const loadHtml = async (proj: Project) => {
     try {
-      const htmlPath = `${proj.folderPath}/interlinear.html`;
-      const fileInfo = await FileSystem.getInfoAsync(htmlPath);
-      if (fileInfo.exists) {
-        const content = await FileSystem.readAsStringAsync(htmlPath);
+      let content = '';
+      
+      if (Platform.OS === 'web') {
+        // For web, get content from storage or project
+        const webContent = await getWebContent(proj.id);
+        if (webContent) {
+          content = webContent;
+        } else if (proj.htmlContent) {
+          content = proj.htmlContent;
+        }
+      } else {
+        // For native platforms, read from file system
+        const htmlPath = `${proj.folderPath}/interlinear.html`;
+        const fileInfo = await FileSystem.getInfoAsync(htmlPath);
+        if (fileInfo.exists) {
+          content = await FileSystem.readAsStringAsync(htmlPath);
+        }
+      }
+      
+      if (content) {
         // Wrap HTML with zoom styling
         const wrappedHtml = `
           <!DOCTYPE html>
