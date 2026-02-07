@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system';
-import { getProjects, Project } from '../utils/storage';
+import { getProjects, Project } from '../src/utils/storage';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
