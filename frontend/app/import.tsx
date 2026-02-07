@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { importZipFromUri, importZipFromUrl } from '../src/utils/zipHandler';
+import { installSampleContent } from '../src/utils/sampleContent';
 
 export default function ImportScreen() {
   const insets = useSafeAreaInsets();
@@ -24,6 +25,27 @@ export default function ImportScreen() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
+
+  const handleLoadSample = async () => {
+    setLoading(true);
+    setStatus('Installing sample content...');
+    try {
+      const success = await installSampleContent();
+      if (success) {
+        Alert.alert('Success', 'Sample content installed successfully!', [
+          { text: 'OK', onPress: () => router.back() },
+        ]);
+      } else {
+        Alert.alert('Error', 'Failed to install sample content.');
+      }
+    } catch (error) {
+      console.error('Error loading sample:', error);
+      Alert.alert('Error', 'Failed to install sample content.');
+    } finally {
+      setLoading(false);
+      setStatus('');
+    }
+  };
 
   const handleFilePick = async () => {
     try {
