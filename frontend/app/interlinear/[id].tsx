@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -14,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { WebView } from 'react-native-webview';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import { getProject, Project } from '../../src/utils/storage';
+import { getProject, getWebContent, Project } from '../../src/utils/storage';
 import Slider from '@react-native-community/slider';
 
 export default function InterlinearScreen() {
