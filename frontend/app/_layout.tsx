@@ -23,6 +23,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ title: 'Interlinear' }} />
         <Stack.Screen name="import" options={{ title: 'Import Content' }} />
+        <Stack.Screen name="create-project" options={{ title: 'Create New Project' }} />
         <Stack.Screen name="project/[id]" options={{ title: 'Project' }} />
         <Stack.Screen name="interlinear/[id]" options={{ title: 'Interlinear View' }} />
         <Stack.Screen name="audio-loop/[id]" options={{ title: 'Audio Loop' }} />
