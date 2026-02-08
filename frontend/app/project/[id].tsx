@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getProject, updateProject, deleteProject, Project } from '../../src/utils/storage';
+import { exportProjectToZip } from '../../src/utils/exportProject';
 
 export default function ProjectScreen() {
   const insets = useSafeAreaInsets();
@@ -21,6 +22,7 @@ export default function ProjectScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editedProject, setEditedProject] = useState<Partial<Project>>({});
 
