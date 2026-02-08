@@ -46,6 +46,22 @@ export default function ProjectScreen() {
     }
   };
 
+  const handleExport = async () => {
+    if (!project) return;
+    setExporting(true);
+    try {
+      const result = await exportProjectToZip(project);
+      if (!result.success) {
+        Alert.alert('Export Failed', result.error || 'Failed to export project');
+      }
+    } catch (error) {
+      console.error('Error exporting project:', error);
+      Alert.alert('Error', 'Failed to export project: ' + (error as Error).message);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!project) return;
     try {
