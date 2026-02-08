@@ -485,6 +485,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  exportButton: {
+    backgroundColor: 'rgba(0, 184, 148, 0.1)',
+  },
+  exportButtonText: {
+    color: '#00b894',
+  },
   deleteButton: {
     backgroundColor: 'rgba(231, 76, 60, 0.1)',
     marginBottom: 0,
