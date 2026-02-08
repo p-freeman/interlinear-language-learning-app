@@ -141,6 +141,30 @@ export default function ImportScreen() {
         contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 20 }]}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Create New Project Button */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="create" size={24} color="#00b894" />
+            <Text style={styles.sectionTitle}>Create New Project</Text>
+          </View>
+          <Text style={styles.sectionDescription}>
+            Manually create a new project by selecting your own audio and HTML files.
+          </Text>
+          <TouchableOpacity
+            style={[styles.button, styles.createButton]}
+            onPress={() => router.push('/create-project')}
+          >
+            <Ionicons name="add-circle" size={20} color="#fff" />
+            <Text style={styles.buttonText}>Create a new Project</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>OR</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Ionicons name="folder-open" size={24} color="#6c5ce7" />
