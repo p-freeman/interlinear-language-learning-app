@@ -318,7 +318,8 @@ export const installSampleContent = async (): Promise<boolean> => {
       return true;
     }
   } catch (error) {
-    console.error('Error installing sample content:', error);
-    return false;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error installing sample content:', errorMessage, error);
+    throw new Error(`Sample content installation failed: ${errorMessage}`);
   }
 };
