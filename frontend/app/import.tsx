@@ -66,7 +66,7 @@ export default function ImportScreen() {
   const handleFilePick = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/zip',
+        type: ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'],
         copyToCacheDirectory: true,
       });
 
@@ -75,17 +75,18 @@ export default function ImportScreen() {
       }
 
       const file = result.assets[0];
+      console.log('File selected:', file);
       setLoading(true);
       setStatus('Reading ZIP file...');
 
-      const success = await importZipFromUri(file.uri, file.name);
+      const importResult = await importZipFromUri(file.uri, file.name || 'import.zip');
       
-      if (success) {
+      if (importResult.success) {
         Alert.alert('Success', 'Content imported successfully!', [
           { text: 'OK', onPress: () => router.back() },
         ]);
       } else {
-        Alert.alert('Error', 'Failed to import content. Please check the ZIP file format.');
+        Alert.alert('Error', importResult.error || 'Failed to import content. Please check the ZIP file format.');
       }
     } catch (error) {
       console.error('Error picking file:', error);
