@@ -112,15 +112,15 @@ export default function ImportScreen() {
     setStatus('Downloading ZIP file...');
 
     try {
-      const success = await importZipFromUrl(url.trim());
+      const importResult = await importZipFromUrl(url.trim());
       
-      if (success) {
+      if (importResult.success) {
         Alert.alert('Success', 'Content imported successfully!', [
           { text: 'OK', onPress: () => router.back() },
         ]);
         setUrl('');
       } else {
-        Alert.alert('Error', 'Failed to import content. Please check the URL and ZIP file format.');
+        Alert.alert('Error', importResult.error || 'Failed to import content. Please check the URL and ZIP file format.');
       }
     } catch (error) {
       console.error('Error downloading:', error);
