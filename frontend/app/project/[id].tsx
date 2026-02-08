@@ -229,6 +229,21 @@ export default function ProjectScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
+            style={[styles.manageButton, styles.exportButton]}
+            onPress={handleExport}
+            disabled={exporting}
+          >
+            {exporting ? (
+              <ActivityIndicator size="small" color="#00b894" />
+            ) : (
+              <Ionicons name="share-outline" size={20} color="#00b894" />
+            )}
+            <Text style={[styles.manageButtonText, styles.exportButtonText]}>
+              {exporting ? 'Exporting...' : 'Export as ZIP (Share)'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[styles.manageButton, styles.deleteButton]}
             onPress={handleDelete}
           >
