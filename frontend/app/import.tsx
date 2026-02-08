@@ -316,6 +316,9 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 8,
   },
+  createButton: {
+    backgroundColor: '#00b894',
+  },
   sampleButton: {
     backgroundColor: '#00b894',
   },
