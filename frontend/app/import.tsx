@@ -82,20 +82,20 @@ export default function ImportScreen() {
       const file = result.assets[0];
       console.log('File selected:', file);
       setLoading(true);
-      setStatus('Reading ZIP file...');
+      setStatus(t.loading);
 
       const importResult = await importZipFromUri(file.uri, file.name || 'import.zip');
       
       if (importResult.success) {
-        Alert.alert('Success', 'Content imported successfully!', [
-          { text: 'OK', onPress: () => router.back() },
+        Alert.alert(t.success, t.importSuccessful, [
+          { text: t.ok, onPress: () => router.back() },
         ]);
       } else {
-        Alert.alert('Error', importResult.error || 'Failed to import content. Please check the ZIP file format.');
+        Alert.alert(t.error, importResult.error || t.invalidZipFormat);
       }
     } catch (error) {
       console.error('Error picking file:', error);
-      Alert.alert('Error', 'Failed to pick file: ' + (error as Error).message);
+      Alert.alert(t.error, t.failedToImport + ': ' + (error as Error).message);
     } finally {
       setLoading(false);
       setStatus('');
@@ -104,32 +104,32 @@ export default function ImportScreen() {
 
   const handleUrlImport = async () => {
     if (!url.trim()) {
-      Alert.alert('Error', 'Please enter a URL');
+      Alert.alert(t.error, 'Please enter a URL');
       return;
     }
 
     if (!url.toLowerCase().endsWith('.zip')) {
-      Alert.alert('Error', 'URL must point to a ZIP file');
+      Alert.alert(t.error, 'URL must point to a ZIP file');
       return;
     }
 
     setLoading(true);
-    setStatus('Downloading ZIP file...');
+    setStatus(t.loading);
 
     try {
       const importResult = await importZipFromUrl(url.trim());
       
       if (importResult.success) {
-        Alert.alert('Success', 'Content imported successfully!', [
-          { text: 'OK', onPress: () => router.back() },
+        Alert.alert(t.success, t.importSuccessful, [
+          { text: t.ok, onPress: () => router.back() },
         ]);
         setUrl('');
       } else {
-        Alert.alert('Error', importResult.error || 'Failed to import content. Please check the URL and ZIP file format.');
+        Alert.alert(t.error, importResult.error || t.invalidZipFormat);
       }
     } catch (error) {
       console.error('Error downloading:', error);
-      Alert.alert('Error', 'Failed to download: ' + (error as Error).message);
+      Alert.alert(t.error, t.failedToImport + ': ' + (error as Error).message);
     } finally {
       setLoading(false);
       setStatus('');
