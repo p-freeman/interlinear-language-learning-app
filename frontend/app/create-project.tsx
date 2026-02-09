@@ -190,17 +190,17 @@ description: ${description.trim() || ''}
         contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 20 }]}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.title}>Create New Project</Text>
+        <Text style={styles.title}>{t.createNewProject}</Text>
         <Text style={styles.subtitle}>
-          Fill in the project details and select your files
+          {t.createNewProjectDesc}
         </Text>
 
         {/* Project Name */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Project Name *</Text>
+          <Text style={styles.label}>{t.projectName} *</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter project name"
+            placeholder={t.projectName}
             placeholderTextColor="#4a4a6a"
             value={projectName}
             onChangeText={setProjectName}
@@ -209,7 +209,7 @@ description: ${description.trim() || ''}
 
         {/* Target Language Dropdown */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Target Language *</Text>
+          <Text style={styles.label}>{t.targetLanguage} *</Text>
           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowTargetDropdown(!showTargetDropdown)}
