@@ -62,7 +62,7 @@ export default function CreateProjectScreen() {
       }
     } catch (error) {
       console.error('Error picking audio file:', error);
-      Alert.alert('Error', 'Failed to pick audio file');
+      Alert.alert(t.error, t.failedToLoad);
     }
   };
 
@@ -81,19 +81,19 @@ export default function CreateProjectScreen() {
       }
     } catch (error) {
       console.error('Error picking HTML file:', error);
-      Alert.alert('Error', 'Failed to pick HTML file');
+      Alert.alert(t.error, t.failedToLoad);
     }
   };
 
   const createProject = async () => {
     // Validation
     if (!projectName.trim()) {
-      Alert.alert('Error', 'Please enter a project name');
+      Alert.alert(t.error, t.pleaseEnterProjectName);
       return;
     }
 
     if (!htmlFile) {
-      Alert.alert('Error', 'Please select an interlinear HTML file');
+      Alert.alert(t.error, t.pleaseSelectHtmlFile);
       return;
     }
 
@@ -168,13 +168,13 @@ description: ${description.trim() || ''}
       await addProject(project);
       console.log('Project saved to storage');
 
-      Alert.alert('Success', 'Project created successfully!', [
-        { text: 'OK', onPress: () => router.back() },
+      Alert.alert(t.success, t.projectCreated, [
+        { text: t.ok, onPress: () => router.back() },
       ]);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Error creating project:', errorMessage, error);
-      Alert.alert('Error', `Failed to create project: ${errorMessage}`);
+      Alert.alert(t.error, `${t.failedToSave}: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
