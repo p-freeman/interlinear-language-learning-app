@@ -1246,6 +1246,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
     description: 'Açıklama',
     optional: 'İsteğe bağlı',
     required: 'Gerekli',
+    requiredFields: 'Zorunlu alanlar',
+    languages: 'Diller',
     projectFiles: 'Proje Dosyaları',
     audioFileOptional: 'Ses Dosyası (İsteğe bağlı)',
     interlinearHtmlFile: 'Satır Arası HTML Dosyası',
