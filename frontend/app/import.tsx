@@ -150,17 +150,17 @@ export default function ImportScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Ionicons name="create" size={24} color="#00b894" />
-            <Text style={styles.sectionTitle}>Create New Project</Text>
+            <Text style={styles.sectionTitle}>{t.createNewProject}</Text>
           </View>
           <Text style={styles.sectionDescription}>
-            Manually create a new project by selecting your own audio and HTML files.
+            {t.createNewProjectDesc}
           </Text>
           <TouchableOpacity
             style={[styles.button, styles.createButton]}
             onPress={() => router.push('/create-project')}
           >
             <Ionicons name="add-circle" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Create a new Project</Text>
+            <Text style={styles.buttonText}>{t.createNewProject}</Text>
           </TouchableOpacity>
         </View>
 
@@ -173,10 +173,10 @@ export default function ImportScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Ionicons name="folder-open" size={24} color="#6c5ce7" />
-            <Text style={styles.sectionTitle}>Import from Device</Text>
+            <Text style={styles.sectionTitle}>{t.importFromDevice}</Text>
           </View>
           <Text style={styles.sectionDescription}>
-            Select a ZIP file from your device containing language learning content.
+            {t.importFromDeviceDesc}
           </Text>
           <TouchableOpacity
             style={[styles.button, loading && styles.buttonDisabled]}
@@ -184,7 +184,7 @@ export default function ImportScreen() {
             disabled={loading}
           >
             <Ionicons name="document" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Choose ZIP File</Text>
+            <Text style={styles.buttonText}>{t.chooseZipFile}</Text>
           </TouchableOpacity>
         </View>
 
@@ -197,10 +197,10 @@ export default function ImportScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Ionicons name="cloud-download" size={24} color="#6c5ce7" />
-            <Text style={styles.sectionTitle}>Import from URL</Text>
+            <Text style={styles.sectionTitle}>{t.importFromUrl}</Text>
           </View>
           <Text style={styles.sectionDescription}>
-            Enter a direct link to a ZIP file to download and import.
+            {t.importFromUrlDesc}
           </Text>
           <TextInput
             style={styles.input}
@@ -219,7 +219,7 @@ export default function ImportScreen() {
             disabled={loading || !url.trim()}
           >
             <Ionicons name="download" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Download & Import</Text>
+            <Text style={styles.buttonText}>{t.downloadAndImport}</Text>
           </TouchableOpacity>
         </View>
 
@@ -232,10 +232,10 @@ export default function ImportScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Ionicons name="sparkles" size={24} color="#00b894" />
-            <Text style={styles.sectionTitle}>Try Sample Content</Text>
+            <Text style={styles.sectionTitle}>{t.loadSampleContent}</Text>
           </View>
           <Text style={styles.sectionDescription}>
-            Load a sample Swiss German lesson to see how the app works.
+            {t.loadSampleContentDesc}
           </Text>
           <TouchableOpacity
             style={[styles.button, styles.sampleButton, loading && styles.buttonDisabled]}
@@ -243,7 +243,7 @@ export default function ImportScreen() {
             disabled={loading}
           >
             <Ionicons name="rocket" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Load Sample Content</Text>
+            <Text style={styles.buttonText}>{t.loadSampleContent}</Text>
           </TouchableOpacity>
         </View>
 
