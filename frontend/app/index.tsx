@@ -70,7 +70,7 @@ export default function HomeScreen() {
     return (
       <View style={[styles.container, styles.centered]}>
         <ActivityIndicator size="large" color="#6c5ce7" />
-        <Text style={styles.loadingText}>Loading projects...</Text>
+        <Text style={styles.loadingText}>{t.loading}</Text>
       </View>
     );
   }
