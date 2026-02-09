@@ -251,7 +251,7 @@ description: ${description.trim() || ''}
 
         {/* Native Language Dropdown */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Native Language *</Text>
+          <Text style={styles.label}>{t.nativeLanguage} *</Text>
           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowNativeDropdown(!showNativeDropdown)}
