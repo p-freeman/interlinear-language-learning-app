@@ -255,22 +255,22 @@ export default function ImportScreen() {
         )}
 
         <View style={styles.infoSection}>
-          <Text style={styles.infoTitle}>Expected ZIP Content:</Text>
+          <Text style={styles.infoTitle}>{t.expectedZipContent}</Text>
           <View style={styles.infoItem}>
             <Ionicons name="musical-note" size={16} color="#a0a0c0" />
-            <Text style={styles.infoText}>audio.mp3 - Audio file</Text>
+            <Text style={styles.infoText}>audio.mp3 - {t.audioFile}</Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="document-text" size={16} color="#a0a0c0" />
-            <Text style={styles.infoText}>interlinear.html - Interlinear text</Text>
+            <Text style={styles.infoText}>interlinear.html - {t.interlinearText}</Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="list" size={16} color="#a0a0c0" />
-            <Text style={styles.infoText}>words_*.txt - Word lists (optional)</Text>
+            <Text style={styles.infoText}>words_*.txt - {t.wordLists}</Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="settings" size={16} color="#a0a0c0" />
-            <Text style={styles.infoText}>project.yaml - Project metadata</Text>
+            <Text style={styles.infoText}>project.yaml - {t.projectMetadata}</Text>
           </View>
         </View>
       </ScrollView>
