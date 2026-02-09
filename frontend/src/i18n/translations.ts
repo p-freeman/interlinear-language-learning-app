@@ -1390,6 +1390,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
     description: 'Danasîn',
     optional: 'Vebijarkî',
     required: 'Pêwîst',
+    requiredFields: 'Qadên pêwîst',
+    languages: 'Ziman',
     projectFiles: 'Pelên Projeyê',
     audioFileOptional: 'Pelê Deng (Vebijarkî)',
     interlinearHtmlFile: 'Pelê HTML yê Navxetî',
