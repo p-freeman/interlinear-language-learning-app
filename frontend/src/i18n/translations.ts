@@ -526,6 +526,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
     description: 'Descrizione',
     optional: 'Opzionale',
     required: 'Richiesto',
+    requiredFields: 'Campi obbligatori',
+    languages: 'Lingue',
     projectFiles: 'File del progetto',
     audioFileOptional: 'File audio (opzionale)',
     interlinearHtmlFile: 'File HTML interlineare',
