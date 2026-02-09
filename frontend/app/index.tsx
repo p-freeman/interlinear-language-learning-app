@@ -13,10 +13,15 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system';
 import { getProjects, Project } from '../src/utils/storage';
+import { useSettings } from '../src/contexts/SettingsContext';
+import { translations } from '../src/i18n/translations';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { settings, updateSettings } = useSettings();
+  const t = translations[settings.appLanguage];
+  
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
