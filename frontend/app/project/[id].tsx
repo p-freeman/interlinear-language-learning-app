@@ -41,10 +41,14 @@ export default function ProjectScreen() {
       if (loadedProject) {
         setProject(loadedProject);
         setEditedProject(loadedProject);
+        // Update last project if remember setting is enabled
+        if (settings.rememberLastProject) {
+          updateSettings({ lastProjectId: loadedProject.id });
+        }
       }
     } catch (error) {
       console.error('Error loading project:', error);
-      Alert.alert('Error', 'Failed to load project');
+      Alert.alert(t.error, t.failedToLoad);
     } finally {
       setLoading(false);
     }
@@ -56,11 +60,11 @@ export default function ProjectScreen() {
     try {
       const result = await exportProjectToZip(project);
       if (!result.success) {
-        Alert.alert('Export Failed', result.error || 'Failed to export project');
+        Alert.alert(t.failedToExport, result.error || t.failedToExport);
       }
     } catch (error) {
       console.error('Error exporting project:', error);
-      Alert.alert('Error', 'Failed to export project: ' + (error as Error).message);
+      Alert.alert(t.error, t.failedToExport + ': ' + (error as Error).message);
     } finally {
       setExporting(false);
     }
@@ -72,21 +76,21 @@ export default function ProjectScreen() {
       await updateProject(project.id, editedProject);
       setProject({ ...project, ...editedProject });
       setEditMode(false);
-      Alert.alert('Success', 'Project updated successfully');
+      Alert.alert(t.success, t.projectUpdated);
     } catch (error) {
       console.error('Error saving project:', error);
-      Alert.alert('Error', 'Failed to save changes');
+      Alert.alert(t.error, t.failedToSave);
     }
   };
 
   const handleDelete = () => {
     Alert.alert(
-      'Delete Project',
-      'Are you sure you want to delete this project? This action cannot be undone.',
+      t.deleteProject,
+      t.deleteProjectConfirm,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t.cancel, style: 'cancel' },
         {
-          text: 'Delete',
+          text: t.delete,
           style: 'destructive',
           onPress: async () => {
             try {
@@ -94,7 +98,7 @@ export default function ProjectScreen() {
               router.back();
             } catch (error) {
               console.error('Error deleting project:', error);
-              Alert.alert('Error', 'Failed to delete project');
+              Alert.alert(t.error, t.failedToSave);
             }
           },
         },
