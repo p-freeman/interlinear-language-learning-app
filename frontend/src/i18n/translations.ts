@@ -81,6 +81,8 @@ interface Translations {
   description: string;
   optional: string;
   required: string;
+  requiredFields: string;
+  languages: string;
   projectFiles: string;
   audioFileOptional: string;
   interlinearHtmlFile: string;
