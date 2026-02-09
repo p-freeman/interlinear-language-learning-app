@@ -18,10 +18,15 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { importZipFromUri, importZipFromUrl } from '../src/utils/zipHandler';
 import { installSampleContent } from '../src/utils/sampleContent';
+import { useSettings } from '../src/contexts/SettingsContext';
+import { translations } from '../src/i18n/translations';
 
 export default function ImportScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { settings } = useSettings();
+  const t = translations[settings.appLanguage];
+  
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
