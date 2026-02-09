@@ -23,6 +23,8 @@ import {
   addProject,
   generateProjectId,
 } from '../src/utils/storage';
+import { useSettings } from '../src/contexts/SettingsContext';
+import { translations } from '../src/i18n/translations';
 
 const TARGET_LANGUAGES = ['German', 'Swiss German'];
 const NATIVE_LANGUAGES = ['English'];
@@ -30,9 +32,11 @@ const NATIVE_LANGUAGES = ['English'];
 export default function CreateProjectScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { settings } = useSettings();
+  const t = translations[settings.appLanguage];
   
   const [projectName, setProjectName] = useState('');
-  const [targetLanguage, setTargetLanguage] = useState('Swiss German');
+  const [targetLanguage, setTargetLanguage] = useState(settings.defaultTargetLanguage);
   const [nativeLanguage, setNativeLanguage] = useState('English');
   const [author, setAuthor] = useState('');
   const [source, setSource] = useState('');
