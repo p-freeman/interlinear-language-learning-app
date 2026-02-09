@@ -282,57 +282,57 @@ export default function ProjectScreen() {
           </View>
           
           <ScrollView style={styles.modalContent}>
-            <Text style={styles.inputLabel}>Project Name</Text>
+            <Text style={styles.inputLabel}>{t.projectName}</Text>
             <TextInput
               style={styles.input}
               value={editedProject.projectName}
               onChangeText={(text) => setEditedProject({ ...editedProject, projectName: text })}
-              placeholder="Project name"
+              placeholder={t.projectName}
               placeholderTextColor="#4a4a6a"
             />
 
-            <Text style={styles.inputLabel}>Author (Optional)</Text>
+            <Text style={styles.inputLabel}>{t.author} ({t.optional})</Text>
             <TextInput
               style={styles.input}
               value={editedProject.author || ''}
               onChangeText={(text) => setEditedProject({ ...editedProject, author: text })}
-              placeholder="Author name"
+              placeholder={t.author}
               placeholderTextColor="#4a4a6a"
             />
 
-            <Text style={styles.inputLabel}>Source (Optional)</Text>
+            <Text style={styles.inputLabel}>{t.source} ({t.optional})</Text>
             <TextInput
               style={styles.input}
               value={editedProject.source || ''}
               onChangeText={(text) => setEditedProject({ ...editedProject, source: text })}
-              placeholder="Source name"
+              placeholder={t.source}
               placeholderTextColor="#4a4a6a"
             />
 
-            <Text style={styles.inputLabel}>Target Language</Text>
+            <Text style={styles.inputLabel}>{t.targetLanguage}</Text>
             <TextInput
               style={styles.input}
               value={editedProject.targetLanguage}
               onChangeText={(text) => setEditedProject({ ...editedProject, targetLanguage: text })}
-              placeholder="Language to learn"
+              placeholder={t.targetLanguage}
               placeholderTextColor="#4a4a6a"
             />
 
-            <Text style={styles.inputLabel}>Native Language</Text>
+            <Text style={styles.inputLabel}>{t.nativeLanguage}</Text>
             <TextInput
               style={styles.input}
               value={editedProject.nativeLanguage}
               onChangeText={(text) => setEditedProject({ ...editedProject, nativeLanguage: text })}
-              placeholder="Your native language"
+              placeholder={t.nativeLanguage}
               placeholderTextColor="#4a4a6a"
             />
 
-            <Text style={styles.inputLabel}>Description (Optional)</Text>
+            <Text style={styles.inputLabel}>{t.description} ({t.optional})</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
               value={editedProject.description || ''}
               onChangeText={(text) => setEditedProject({ ...editedProject, description: text })}
-              placeholder="Description"
+              placeholder={t.description}
               placeholderTextColor="#4a4a6a"
               multiline
               numberOfLines={4}
