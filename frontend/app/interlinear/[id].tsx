@@ -5,9 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions,
   Platform,
-  ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -17,11 +15,17 @@ import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system/legacy';
 import { getProject, getWebContent, Project } from '../../src/utils/storage';
 import Slider from '@react-native-community/slider';
+import { useSettings, getFontSizeValue } from '../../src/contexts/SettingsContext';
+import { translations } from '../../src/i18n/translations';
+import { startStudySession, endStudySession } from '../../src/utils/statistics';
 
 export default function InterlinearScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { settings } = useSettings();
+  const t = translations[settings.appLanguage];
+  
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [htmlContent, setHtmlContent] = useState('');
@@ -32,9 +36,14 @@ export default function InterlinearScreen() {
   const [duration, setDuration] = useState(0);
   const webViewRef = useRef<WebView>(null);
 
+  // Apply font size from settings
+  const baseFontSize = getFontSizeValue(settings.fontSize);
+
   useEffect(() => {
     loadProject();
     return () => {
+      // End study session when leaving screen
+      endStudySession();
       if (sound) {
         sound.unloadAsync();
       }
@@ -49,6 +58,11 @@ export default function InterlinearScreen() {
         setProject(loadedProject);
         await loadHtml(loadedProject);
         await loadAudio(loadedProject);
+        
+        // Start tracking study time if statistics are enabled
+        if (settings.studyStatisticsEnabled) {
+          startStudySession(loadedProject.id, loadedProject.projectName, 'active_reading');
+        }
       }
     } catch (error) {
       console.error('Error loading project:', error);
@@ -62,7 +76,6 @@ export default function InterlinearScreen() {
       let content = '';
       
       if (Platform.OS === 'web') {
-        // For web, get content from storage or project
         const webContent = await getWebContent(proj.id);
         if (webContent) {
           content = webContent;
@@ -70,7 +83,6 @@ export default function InterlinearScreen() {
           content = proj.htmlContent;
         }
       } else {
-        // For native platforms, read from file system
         const htmlPath = `${proj.folderPath}/interlinear.html`;
         const fileInfo = await FileSystem.getInfoAsync(htmlPath);
         if (fileInfo.exists) {
@@ -79,7 +91,6 @@ export default function InterlinearScreen() {
       }
       
       if (content) {
-        // Wrap HTML with zoom styling
         const wrappedHtml = `
           <!DOCTYPE html>
           <html>
@@ -90,6 +101,7 @@ export default function InterlinearScreen() {
                 background-color: #0f0f1a;
                 color: #fff;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-size: ${baseFontSize}px;
                 padding: 16px;
                 margin: 0;
                 line-height: 1.6;
@@ -106,16 +118,15 @@ export default function InterlinearScreen() {
         `;
         setHtmlContent(wrappedHtml);
       } else {
-        setHtmlContent('<html><body><h2 style="color:#fff;text-align:center;padding:20px;">No interlinear.html file found in this project.</h2></body></html>');
+        setHtmlContent(`<html><body><h2 style="color:#fff;text-align:center;padding:20px;">${t.noContentAvailable}</h2></body></html>`);
       }
     } catch (error) {
       console.error('Error loading HTML:', error);
-      setHtmlContent('<html><body><h2 style="color:#fff;text-align:center;padding:20px;">Error loading interlinear text.</h2></body></html>');
+      setHtmlContent(`<html><body><h2 style="color:#fff;text-align:center;padding:20px;">${t.failedToLoad}</h2></body></html>`);
     }
   };
 
   const loadAudio = async (proj: Project) => {
-    // Skip audio on web platform for now
     if (Platform.OS === 'web') {
       console.log('Audio playback not supported on web preview');
       return;
@@ -124,7 +135,7 @@ export default function InterlinearScreen() {
     try {
       await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true,
-        staysActiveInBackground: true,
+        staysActiveInBackground: settings.backgroundPlayback,
       });
 
       const audioPath = `${proj.folderPath}/audio.mp3`;
@@ -133,7 +144,7 @@ export default function InterlinearScreen() {
       if (fileInfo.exists) {
         const { sound: newSound } = await Audio.Sound.createAsync(
           { uri: audioPath },
-          { shouldPlay: false },
+          { shouldPlay: settings.autoPlayAudio, rate: settings.playbackSpeed, shouldCorrectPitch: true },
           onPlaybackStatusUpdate
         );
         setSound(newSound);
@@ -218,7 +229,7 @@ export default function InterlinearScreen() {
           />
         ) : (
           <View style={styles.centered}>
-            <Text style={styles.noContentText}>No content available</Text>
+            <Text style={styles.noContentText}>{t.noContentAvailable}</Text>
           </View>
         )}
       </View>
@@ -258,7 +269,7 @@ export default function InterlinearScreen() {
         </View>
         
         {!sound && (
-          <Text style={styles.noAudioText}>No audio file available</Text>
+          <Text style={styles.noAudioText}>{t.noAudioAvailable}</Text>
         )}
       </View>
     </View>

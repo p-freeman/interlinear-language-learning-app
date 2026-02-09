@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
@@ -13,10 +14,16 @@ import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system/legacy';
 import { getProject, Project } from '../../src/utils/storage';
 import Slider from '@react-native-community/slider';
+import { useSettings } from '../../src/contexts/SettingsContext';
+import { translations } from '../../src/i18n/translations';
+import { startStudySession, endStudySession } from '../../src/utils/statistics';
 
 export default function AudioLoopScreen() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { settings } = useSettings();
+  const t = translations[settings.appLanguage];
+  
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
@@ -25,10 +32,13 @@ export default function AudioLoopScreen() {
   const [duration, setDuration] = useState(0);
   const [loopCount, setLoopCount] = useState(0);
   const [hasAudio, setHasAudio] = useState(false);
+  const lastPositionRef = useRef(0);
 
   useEffect(() => {
     loadProject();
     return () => {
+      // End study session when leaving screen
+      endStudySession();
       if (sound) {
         sound.unloadAsync();
       }
@@ -42,6 +52,11 @@ export default function AudioLoopScreen() {
       if (loadedProject) {
         setProject(loadedProject);
         await loadAudio(loadedProject);
+        
+        // Start tracking study time if statistics are enabled
+        if (settings.studyStatisticsEnabled) {
+          startStudySession(loadedProject.id, loadedProject.projectName, 'passive_listening');
+        }
       }
     } catch (error) {
       console.error('Error loading project:', error);
@@ -51,10 +66,16 @@ export default function AudioLoopScreen() {
   };
 
   const loadAudio = async (proj: Project) => {
+    // Skip audio on web platform
+    if (Platform.OS === 'web') {
+      setHasAudio(false);
+      return;
+    }
+    
     try {
       await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true,
-        staysActiveInBackground: true,
+        staysActiveInBackground: settings.backgroundPlayback,
       });
 
       const audioPath = `${proj.folderPath}/audio.mp3`;
@@ -64,7 +85,7 @@ export default function AudioLoopScreen() {
         setHasAudio(true);
         const { sound: newSound } = await Audio.Sound.createAsync(
           { uri: audioPath },
-          { shouldPlay: false, isLooping: true },
+          { shouldPlay: false, isLooping: true, rate: settings.playbackSpeed, shouldCorrectPitch: true },
           onPlaybackStatusUpdate
         );
         setSound(newSound);
@@ -83,10 +104,19 @@ export default function AudioLoopScreen() {
       setDuration(status.durationMillis || 0);
       setIsPlaying(status.isPlaying);
       
-      // Detect loop completion
-      if (status.didJustFinish && status.isLooping) {
-        setLoopCount(prev => prev + 1);
+      // Detect loop completion: position resets back to near 0 while playing
+      const currentPos = status.positionMillis || 0;
+      if (status.isPlaying && lastPositionRef.current > currentPos + 1000 && currentPos < 1000) {
+        setLoopCount(prev => {
+          const newCount = prev + 1;
+          // Check if we should stop based on autoRepeatCount setting
+          if (settings.autoRepeatCount > 0 && newCount >= settings.autoRepeatCount) {
+            sound?.pauseAsync();
+          }
+          return newCount;
+        });
       }
+      lastPositionRef.current = currentPos;
     }
   };
 
@@ -127,9 +157,9 @@ export default function AudioLoopScreen() {
     return (
       <View style={[styles.container, styles.centered]}>
         <Ionicons name="musical-notes-outline" size={80} color="#4a4a6a" />
-        <Text style={styles.noAudioTitle}>No Audio File</Text>
+        <Text style={styles.noAudioTitle}>{t.noAudioFile}</Text>
         <Text style={styles.noAudioText}>
-          This project doesn't have an audio.mp3 file.
+          {t.noAudioAvailable}
         </Text>
       </View>
     );
@@ -141,7 +171,7 @@ export default function AudioLoopScreen() {
         {/* Project Info */}
         <View style={styles.projectInfo}>
           <Text style={styles.projectName}>{project?.projectName}</Text>
-          <Text style={styles.subtitle}>Passive Listening Mode</Text>
+          <Text style={styles.subtitle}>{t.passiveListeningMode}</Text>
         </View>
 
         {/* Loop Visualization */}
@@ -157,11 +187,16 @@ export default function AudioLoopScreen() {
 
         {/* Loop Counter */}
         <View style={styles.loopCounterContainer}>
-          <Text style={styles.loopCounterLabel}>Loops Completed</Text>
+          <Text style={styles.loopCounterLabel}>{t.loopsCompleted}</Text>
           <Text style={styles.loopCounter}>{loopCount}</Text>
+          {settings.autoRepeatCount > 0 && (
+            <Text style={styles.loopLimitText}>
+              / {settings.autoRepeatCount}
+            </Text>
+          )}
           <TouchableOpacity style={styles.resetButton} onPress={resetLoopCount}>
             <Ionicons name="refresh" size={16} color="#a0a0c0" />
-            <Text style={styles.resetText}>Reset</Text>
+            <Text style={styles.resetText}>{t.reset}</Text>
           </TouchableOpacity>
         </View>
 
@@ -207,10 +242,14 @@ export default function AudioLoopScreen() {
           />
         </TouchableOpacity>
 
+        {/* Playback Speed Indicator */}
+        <Text style={styles.speedText}>
+          {settings.playbackSpeed.toFixed(1)}x
+        </Text>
+
         {/* Info Text */}
         <Text style={styles.infoText}>
-          Audio will play continuously on loop.
-          Great for passive listening practice!
+          {t.audioLoopInfo}
         </Text>
       </View>
     </View>
@@ -282,6 +321,11 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: 'bold',
   },
+  loopLimitText: {
+    color: '#6c5ce7',
+    fontSize: 24,
+    marginTop: -8,
+  },
   resetButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -332,10 +376,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#6c5ce7',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 16,
   },
   playButtonActive: {
     backgroundColor: '#00b894',
+  },
+  speedText: {
+    color: '#6c5ce7',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 16,
   },
   infoText: {
     color: '#a0a0c0',
