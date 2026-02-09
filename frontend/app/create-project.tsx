@@ -26,8 +26,8 @@ import {
 import { useSettings } from '../src/contexts/SettingsContext';
 import { translations } from '../src/i18n/translations';
 
-const TARGET_LANGUAGES = ['German', 'Swiss German'];
-const NATIVE_LANGUAGES = ['English'];
+const TARGET_LANGUAGES = ['German', 'Swiss German'] as const;
+const NATIVE_LANGUAGES = ['English'] as const;
 
 export default function CreateProjectScreen() {
   const insets = useSafeAreaInsets();
@@ -36,8 +36,8 @@ export default function CreateProjectScreen() {
   const t = translations[settings.appLanguage];
   
   const [projectName, setProjectName] = useState('');
-  const [targetLanguage, setTargetLanguage] = useState(settings.defaultTargetLanguage);
-  const [nativeLanguage, setNativeLanguage] = useState('English');
+  const [targetLanguage, setTargetLanguage] = useState<string>(settings.defaultTargetLanguage);
+  const [nativeLanguage, setNativeLanguage] = useState<string>('English');
   const [author, setAuthor] = useState('');
   const [source, setSource] = useState('');
   const [description, setDescription] = useState('');
