@@ -293,10 +293,10 @@ description: ${description.trim() || ''}
 
         {/* Author (Optional) */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Author (Optional)</Text>
+          <Text style={styles.label}>{t.author} ({t.optional})</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter author name"
+            placeholder={t.author}
             placeholderTextColor="#4a4a6a"
             value={author}
             onChangeText={setAuthor}
@@ -305,10 +305,10 @@ description: ${description.trim() || ''}
 
         {/* Source (Optional) */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Source (Optional)</Text>
+          <Text style={styles.label}>{t.source} ({t.optional})</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter source"
+            placeholder={t.source}
             placeholderTextColor="#4a4a6a"
             value={source}
             onChangeText={setSource}
@@ -317,10 +317,10 @@ description: ${description.trim() || ''}
 
         {/* Description (Optional) */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Description (Optional)</Text>
+          <Text style={styles.label}>{t.description} ({t.optional})</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
-            placeholder="Enter description"
+            placeholder={t.description}
             placeholderTextColor="#4a4a6a"
             value={description}
             onChangeText={setDescription}
@@ -331,22 +331,22 @@ description: ${description.trim() || ''}
 
         {/* File Pickers */}
         <View style={styles.fileSection}>
-          <Text style={styles.sectionTitle}>Project Files</Text>
+          <Text style={styles.sectionTitle}>{t.projectFiles}</Text>
 
           {/* Audio File Picker */}
           <View style={styles.filePicker}>
             <View style={styles.fileInfo}>
               <Ionicons name="musical-note" size={24} color="#6c5ce7" />
               <View style={styles.fileDetails}>
-                <Text style={styles.fileLabel}>Audio File (Optional)</Text>
+                <Text style={styles.fileLabel}>{t.audioFile} ({t.optional})</Text>
                 <Text style={styles.fileName}>
-                  {audioFile ? audioFile.name : 'No file selected'}
+                  {audioFile ? audioFile.name : t.noFileSelected}
                 </Text>
               </View>
             </View>
             <TouchableOpacity style={styles.fileButton} onPress={pickAudioFile}>
               <Ionicons name="folder-open" size={18} color="#fff" />
-              <Text style={styles.fileButtonText}>Browse</Text>
+              <Text style={styles.fileButtonText}>{t.browse}</Text>
             </TouchableOpacity>
           </View>
 
