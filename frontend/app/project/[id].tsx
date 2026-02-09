@@ -118,9 +118,9 @@ export default function ProjectScreen() {
     return (
       <View style={[styles.container, styles.centered]}>
         <Ionicons name="alert-circle" size={64} color="#e74c3c" />
-        <Text style={styles.errorText}>Project not found</Text>
+        <Text style={styles.errorText}>{t.failedToLoad}</Text>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>Go Back</Text>
+          <Text style={styles.backButtonText}>{t.back}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -140,12 +140,12 @@ export default function ProjectScreen() {
         </View>
 
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Project Details</Text>
+          <Text style={styles.sectionTitle}>{t.projectDetails}</Text>
           
           <View style={styles.infoRow}>
             <View style={styles.infoLabel}>
               <Ionicons name="language" size={18} color="#6c5ce7" />
-              <Text style={styles.labelText}>Target Language</Text>
+              <Text style={styles.labelText}>{t.targetLanguage}</Text>
             </View>
             <Text style={styles.infoValue}>{project.targetLanguage}</Text>
           </View>
@@ -153,7 +153,7 @@ export default function ProjectScreen() {
           <View style={styles.infoRow}>
             <View style={styles.infoLabel}>
               <Ionicons name="globe" size={18} color="#6c5ce7" />
-              <Text style={styles.labelText}>Native Language</Text>
+              <Text style={styles.labelText}>{t.nativeLanguage}</Text>
             </View>
             <Text style={styles.infoValue}>{project.nativeLanguage}</Text>
           </View>
@@ -162,7 +162,7 @@ export default function ProjectScreen() {
             <View style={styles.infoRow}>
               <View style={styles.infoLabel}>
                 <Ionicons name="person" size={18} color="#6c5ce7" />
-                <Text style={styles.labelText}>Author</Text>
+                <Text style={styles.labelText}>{t.author}</Text>
               </View>
               <Text style={styles.infoValue}>{project.author}</Text>
             </View>
@@ -172,7 +172,7 @@ export default function ProjectScreen() {
             <View style={styles.infoRow}>
               <View style={styles.infoLabel}>
                 <Ionicons name="link" size={18} color="#6c5ce7" />
-                <Text style={styles.labelText}>Source</Text>
+                <Text style={styles.labelText}>{t.source}</Text>
               </View>
               <Text style={styles.infoValue}>{project.source}</Text>
             </View>
@@ -182,7 +182,7 @@ export default function ProjectScreen() {
             <View style={styles.descriptionSection}>
               <View style={styles.infoLabel}>
                 <Ionicons name="information-circle" size={18} color="#6c5ce7" />
-                <Text style={styles.labelText}>Description</Text>
+                <Text style={styles.labelText}>{t.description}</Text>
               </View>
               <Text style={styles.descriptionText}>{project.description}</Text>
             </View>
@@ -190,7 +190,7 @@ export default function ProjectScreen() {
         </View>
 
         <View style={styles.actionsSection}>
-          <Text style={styles.sectionTitle}>Learning Actions</Text>
+          <Text style={styles.sectionTitle}>{t.learningActions}</Text>
           
           <TouchableOpacity
             style={styles.actionButton}
@@ -200,9 +200,9 @@ export default function ProjectScreen() {
               <Ionicons name="document-text" size={24} color="#fff" />
             </View>
             <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Open Interlinear Text</Text>
+              <Text style={styles.actionTitle}>{t.openInterlinearText}</Text>
               <Text style={styles.actionDescription}>
-                View the word-by-word translation with audio
+                {t.viewWordByWord}
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={24} color="#6c5ce7" />
@@ -216,9 +216,9 @@ export default function ProjectScreen() {
               <Ionicons name="repeat" size={24} color="#fff" />
             </View>
             <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Loop Audio</Text>
+              <Text style={styles.actionTitle}>{t.loopAudio}</Text>
               <Text style={styles.actionDescription}>
-                Play the audio file continuously on repeat
+                {t.playAudioContinuously}
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={24} color="#6c5ce7" />
@@ -226,14 +226,14 @@ export default function ProjectScreen() {
         </View>
 
         <View style={styles.manageSection}>
-          <Text style={styles.sectionTitle}>Manage</Text>
+          <Text style={styles.sectionTitle}>{t.manage}</Text>
           
           <TouchableOpacity
             style={styles.manageButton}
             onPress={() => setEditMode(true)}
           >
             <Ionicons name="create" size={20} color="#6c5ce7" />
-            <Text style={styles.manageButtonText}>Edit Project Details</Text>
+            <Text style={styles.manageButtonText}>{t.editProjectDetails}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -247,7 +247,7 @@ export default function ProjectScreen() {
               <Ionicons name="share-outline" size={20} color="#00b894" />
             )}
             <Text style={[styles.manageButtonText, styles.exportButtonText]}>
-              {exporting ? 'Exporting...' : 'Export as ZIP (Share)'}
+              {exporting ? t.loading : t.exportAsZip}
             </Text>
           </TouchableOpacity>
 
@@ -257,7 +257,7 @@ export default function ProjectScreen() {
           >
             <Ionicons name="trash" size={20} color="#e74c3c" />
             <Text style={[styles.manageButtonText, styles.deleteButtonText]}>
-              Delete Project
+              {t.deleteProject}
             </Text>
           </TouchableOpacity>
         </View>
@@ -273,11 +273,11 @@ export default function ProjectScreen() {
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <TouchableOpacity onPress={() => setEditMode(false)}>
-              <Text style={styles.modalCancel}>Cancel</Text>
+              <Text style={styles.modalCancel}>{t.cancel}</Text>
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Edit Project</Text>
+            <Text style={styles.modalTitle}>{t.edit}</Text>
             <TouchableOpacity onPress={handleSave}>
-              <Text style={styles.modalSave}>Save</Text>
+              <Text style={styles.modalSave}>{t.save}</Text>
             </TouchableOpacity>
           </View>
           
