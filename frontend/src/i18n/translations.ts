@@ -1102,6 +1102,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
     description: 'Опис',
     optional: 'Опціонально',
     required: 'Обов\'язково',
+    requiredFields: 'Обов\'язкові поля',
+    languages: 'Мови',
     projectFiles: 'Файли проекту',
     audioFileOptional: 'Аудіофайл (опціонально)',
     interlinearHtmlFile: 'HTML-файл з підрядником',
