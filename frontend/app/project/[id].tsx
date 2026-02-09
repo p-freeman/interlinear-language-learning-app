@@ -15,11 +15,15 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getProject, updateProject, deleteProject, Project } from '../../src/utils/storage';
 import { exportProjectToZip } from '../../src/utils/exportProject';
+import { useSettings } from '../../src/contexts/SettingsContext';
+import { translations } from '../../src/i18n/translations';
 
 export default function ProjectScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { settings, updateSettings } = useSettings();
+  const t = translations[settings.appLanguage];
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
