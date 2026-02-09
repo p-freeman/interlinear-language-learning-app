@@ -958,6 +958,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
     description: 'Описание',
     optional: 'Опционально',
     required: 'Обязательно',
+    requiredFields: 'Обязательные поля',
+    languages: 'Языки',
     projectFiles: 'Файлы проекта',
     audioFileOptional: 'Аудиофайл (опционально)',
     interlinearHtmlFile: 'HTML-файл с подстрочником',
