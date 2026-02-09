@@ -289,7 +289,7 @@ export default function SettingsScreen() {
 
           <TouchableOpacity 
             style={styles.actionButton}
-            onPress={() => router.push('/export-backup')}
+            onPress={() => Alert.alert(t.exportAllProjects, 'This feature will export all your projects as a backup file. Coming soon!')}
           >
             <Ionicons name="cloud-upload-outline" size={20} color="#00b894" />
             <Text style={[styles.actionButtonText, { color: '#00b894' }]}>{t.exportAllProjects}</Text>
