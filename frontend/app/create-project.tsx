@@ -355,15 +355,15 @@ description: ${description.trim() || ''}
             <View style={styles.fileInfo}>
               <Ionicons name="document-text" size={24} color="#6c5ce7" />
               <View style={styles.fileDetails}>
-                <Text style={styles.fileLabel}>Interlinear HTML File *</Text>
+                <Text style={styles.fileLabel}>{t.interlinearHtmlFile} *</Text>
                 <Text style={styles.fileName}>
-                  {htmlFile ? htmlFile.name : 'No file selected'}
+                  {htmlFile ? htmlFile.name : t.noFileSelected}
                 </Text>
               </View>
             </View>
             <TouchableOpacity style={styles.fileButton} onPress={pickHtmlFile}>
               <Ionicons name="folder-open" size={18} color="#fff" />
-              <Text style={styles.fileButtonText}>Browse</Text>
+              <Text style={styles.fileButtonText}>{t.browse}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -379,12 +379,12 @@ description: ${description.trim() || ''}
           ) : (
             <>
               <Ionicons name="create" size={24} color="#fff" />
-              <Text style={styles.createButtonText}>Create Project</Text>
+              <Text style={styles.createButtonText}>{t.createNewProject}</Text>
             </>
           )}
         </TouchableOpacity>
 
-        <Text style={styles.requiredNote}>* Required fields</Text>
+        <Text style={styles.requiredNote}>* {t.requiredFields}</Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );
