@@ -34,33 +34,33 @@ export default function ImportScreen() {
   const handleLoadSample = async () => {
     console.log('handleLoadSample called');
     setLoading(true);
-    setStatus('Installing sample content...');
+    setStatus(t.loading);
     try {
       console.log('Calling installSampleContent...');
       const success = await installSampleContent();
       console.log('installSampleContent result:', success);
       if (success) {
         if (Platform.OS === 'web') {
-          window.alert('Sample content installed successfully!');
+          window.alert(t.importSuccessful);
           router.back();
         } else {
-          Alert.alert('Success', 'Sample content installed successfully!', [
-            { text: 'OK', onPress: () => router.back() },
+          Alert.alert(t.success, t.importSuccessful, [
+            { text: t.ok, onPress: () => router.back() },
           ]);
         }
       } else {
         if (Platform.OS === 'web') {
-          window.alert('Failed to install sample content.');
+          window.alert(t.failedToImport);
         } else {
-          Alert.alert('Error', 'Failed to install sample content.');
+          Alert.alert(t.error, t.failedToImport);
         }
       }
     } catch (error) {
       console.error('Error loading sample:', error);
       if (Platform.OS === 'web') {
-        window.alert('Failed to install sample content: ' + (error as Error).message);
+        window.alert(t.failedToImport + ': ' + (error as Error).message);
       } else {
-        Alert.alert('Error', 'Failed to install sample content: ' + (error as Error).message);
+        Alert.alert(t.error, t.failedToImport + ': ' + (error as Error).message);
       }
     } finally {
       setLoading(false);
