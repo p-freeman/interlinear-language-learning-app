@@ -91,10 +91,9 @@ export default function HomeScreen() {
         {projects.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Ionicons name="library-outline" size={80} color="#4a4a6a" />
-            <Text style={styles.emptyTitle}>No Content Yet</Text>
+            <Text style={styles.emptyTitle}>{t.noContentYet}</Text>
             <Text style={styles.emptyText}>
-              Import language learning content to get started.
-              Tap the + button below to import a content package.
+              {t.importContentToStart}
             </Text>
           </View>
         ) : (
@@ -102,12 +101,12 @@ export default function HomeScreen() {
             <View key={targetLang} style={styles.languageSection}>
               <Text style={styles.targetLanguageHeader}>
                 <Ionicons name="language" size={20} color="#6c5ce7" />
-                {' Learn ' + targetLang}
+                {' ' + t.learn + ' ' + targetLang}
               </Text>
               {Object.entries(nativeGroups).map(([nativeLang, langProjects]) => (
                 <View key={nativeLang} style={styles.nativeSection}>
                   <Text style={styles.nativeLanguageHeader}>
-                    From {nativeLang}
+                    {t.from} {nativeLang}
                   </Text>
                   {langProjects.map(project => (
                     <TouchableOpacity
